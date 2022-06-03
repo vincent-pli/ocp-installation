@@ -1,0 +1,180 @@
+[all:children]
+masters
+workers
+
+[all:vars]
+
+domain_name="cluster.local.com"
+cluster_name="ocp48"
+BASE_DOMAIN="{{cluster_name}}.{{domain_name}}"
+REGISTRY_SERVER="registry.{{BASE_DOMAIN}}"
+REGISTRY_PORT="5000"
+LOCAL_REGISTRY="{{REGISTRY_SERVER}}:{{REGISTRY_PORT}}"
+EMAIL="hanzhis@cn.ibm.com"
+REGISTRY_USER="admin"
+REGISTRY_PASSWORD="passw0rd"
+
+OCP_VERSION="4.8"
+OCP_RELEASE="4.8.21"
+RHCOS_RELEASE="4.8.21"
+LOCAL_REPOSITORY="ocp4/openshift4" 
+PRODUCT_REPO="openshift-release-dev"
+LOCAL_PULL_SECRET="/tmp/pull-secret.txt"
+
+WORKING_DIR="/ocp4-workspace"
+LOCAL_SECRET_JSON="{{WORKING_DIR}}/install/ocp_pullsecret.json" 
+RELEASE_NAME="ocp-release"
+
+BASTION_ROOT_PASSWORD="letmein"
+ocp_admin_password="Pmet_123456"
+
+bastion_ip="172.16.251.242"
+
+ntp_allow="172.16.251.0/24"
+ntp_servers=['172.16.251.242']
+default_gateway="172.16.255.250"
+external_name_servers=['172.16.251.242']
+interface_script="/etc/sysconfig/network-scripts/ifcfg-ens192"
+
+apiVIP="172.16.251.221"
+ingressVIP="172.16.251.221"
+vm_number_of_masters=3
+vm_number_of_workers=3
+
+###############################################################################
+#################  dependencies ###############################################
+###############################################################################
+
+OCP_CLIENT_CMD_URL="https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{OCP_RELEASE}}/openshift-client-linux.tar.gz"
+OCP_INSTALL_CMD_URL="https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{OCP_RELEASE}}/openshift-install-linux.tar.gz"
+
+RHCOS_IMAGE_URL="https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/{{OCP_VERSION}}/latest"
+CENTOS_IMAGE_URL="http://mirror.dal.nexril.net/centos/8-stream/isos/x86_64/CentOS-Stream-8-x86_64-20220525-boot.iso"
+
+
+###############################################################################
+##########  whether download operatorhub and config it, true/false
+###############################################################################
+OPERATOR_HUB="false"
+
+
+###############################################################################
+##########  custom params 
+###############################################################################
+
+REGISTRY_NAME="ocp-install-registry"
+HTTPD_LISTEN_PORT="9080"
+
+pull_secret_file="{{WORKING_DIR}}/install/ocp_pullsecret.json"
+
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+rhcos_installation_method=pxe
+vm_create_vms=False
+run_install=False
+
+ocp_install_dir="{{WORKING_DIR}}/dependencies"
+openshift_release="{{OCP_VERSION}}"
+openshift_base_url="https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-{{openshift_release}}/"
+rhcos_base_url="https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/"
+openshift_client_package_pattern=".*(openshift-client.*tar.gz).*"
+openshift_install_package_pattern=".*(openshift-install-linux.*tar.gz).*"
+
+rhcos_metal_package_pattern=".*(rhcos.*metal.*raw.gz).*"
+rhcos_kernel_package_pattern=".*(rhcos.*-kernel.x86_64).*"
+rhcos_initramfs_package_pattern=".*(rhcos.*initramfs.x86_64.img).*"
+rhcos_rootfs_package_pattern=".*(rhcos.*rootfs.x86_64.img).*"
+rhcos_ova_package_pattern=".*(rhcos.*.ova).*"
+
+#
+# Air gapped installation settings
+#
+air_gapped_install=True
+air_gapped_registry_server="{{REGISTRY_SERVER}}"
+air_gapped_source_ocp_release="quay.io/openshift-release-dev/ocp-release"
+air_gapped_mirror_ocp_release="{{air_gapped_registry_server}}:{{REGISTRY_PORT}}/ocp4/openshift4"
+air_gapped_source_ocp_release_dev="quay.io/openshift-release-dev/ocp-v4.0-art-dev"
+air_gapped_mirror_ocp_release_dev="{{air_gapped_registry_server}}:{{REGISTRY_PORT}}/ocp4/openshift4"
+air_gapped_registry_trust_bundle_file={{WORKING_DIR}}/registry/certs/registry.crt
+air_gapped_download_dir="{{WORKING_DIR}}"
+
+
+opt_out_health_checking=False
+
+setup_chrony_server=True
+
+override_chrony_settings_on_cluster_nodes=True
+
+dhcp_on_bastion=False
+dhcp_range=['192.168.100.41','192.168.100.50']
+
+manage_load_balancer=True
+
+http_server_port=9080
+
+setup_desktop=False
+
+set_bastion_hostname=True
+
+manage_nfs=True
+nfs_volume_selector="sdb"
+volume_selector="sdb"
+
+nfs_volume_mount_path="/nfs"
+mount_point="/nfs"
+
+create_nfs_sc=True
+create_portworx_sc=False
+
+image_registry_storage_class=nfs-client
+image_registry_size=200Gi
+
+service_network="172.30.0.0/16"
+
+vc_vcenter="10.99.92.13"
+vc_datacenter="Datacenter1"
+vc_datastore="Datastore1"
+vc_cluster="Cluster1"
+vc_res_pool="resourcepool"
+vc_folder="fkocp46"
+vc_guest_id="rhel7_64Guest"
+vc_network="VM Network"
+vm_template="/Datacenter1/vm/Templates/RHCOS_4.6.8"
+
+# Bootstrap VM properties
+vm_bootstrap_mem=16384
+vm_bootstrap_cpu=4
+vm_bootstrap_disk=100
+
+# Master VM properties
+vm_master_mem=32768
+vm_master_cpu=8
+vm_master_disk=200
+
+# Worker VM properties
+vm_worker_mem=65536
+vm_worker_cpu=16
+vm_worker_disk=200
+
+
+[lb]
+172.16.251.242 host="bastion"
+
+[nfs]
+172.16.251.242 host="bastion"
+
+[bastion]
+172.16.251.242 host="bastion"
+
+[bootstrap]
+172.16.251.221 host="bootstrap" mac="xx:xx:xx:xx:xx:xx"
+
+[masters]
+172.16.251.222 host="master-1" mac="xx:xx:xx:xx:xx:xx"
+172.16.251.223 host="master-1" mac="xx:xx:xx:xx:xx:xx"
+172.16.251.224 host="master-1" mac="xx:xx:xx:xx:xx:xx"
+
+[workers]
+172.16.251.225 host="worker-1" mac="xx:xx:xx:xx:xx:xx"
+172.16.251.226 host="worker-2" mac="xx:xx:xx:xx:xx:xx"
+172.16.251.227 host="worker-3" mac="xx:xx:xx:xx:xx:xx"

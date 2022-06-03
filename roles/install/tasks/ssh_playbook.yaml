@@ -1,0 +1,31 @@
+---
+# Set up password-less SSH
+
+- name: Get host name for current node
+  command: hostname
+  register: hostname
+
+- name: Generate SSH key on current host (if not existent)
+  shell: |
+    if [ ! -e ~/.ssh/id_rsa ];then ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa -C "{{ hostname.stdout }}";fi
+  ignore_errors: true
+
+- name: Configure host for password-less SSH for bastion node
+  authorized_key:
+    user: root
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: Configure host for password-less SSH for NFS node
+  authorized_key:
+    user: root
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+  when: manage_nfs|bool
+
+- name: Configure host for password-less SSH for load balancer
+  authorized_key:
+    user: root
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+  when: manage_load_balancer is not defined or manage_load_balancer|bool

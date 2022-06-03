@@ -1,0 +1,6 @@
+---
+- name: install
+  hosts: localhost
+  connection: local
+  roles:
+    - install

@@ -1,0 +1,11 @@
+---
+- name: prepare
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  become: no
+  tasks:
+    - include: tasks/install-rpms.yaml
+      #- include: tasks/download-dependencies.yaml
+      #- include: tasks/mirror-ocp-images.yaml
+      #- include: tasks/package-offline.yaml

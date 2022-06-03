@@ -1,0 +1,8 @@
+---
+- name: package
+  shell: |
+      mkdir -p /offline-package
+      
+      cp {{WORKING_DIR}}/dependencies/centos.iso /offline-package/centos.iso
+      cp -r /root/ocp4-air-gapped-installation-bare-metal {{WORKING_DIR}}/installation-scripts 
+      tar -zcvf /offline-package/ocp4_downloads.tar.gz {{WORKING_DIR}}

@@ -1,0 +1,45 @@
+---
+- name: create rpms folder
+  file:
+    path: /ocp4_downloads/rpms
+    state: directory
+    recurse: yes
+    owner: root
+    group: root
+
+- name: download rpms
+  dnf:
+    name:
+      - wget
+      - podman
+      - httpd-tools
+      - jq
+      - ansible
+      - bind-utils
+      - buildah
+      - chrony
+      - dnsmasq
+      - git
+      - haproxy
+      - libvirt
+      - net-tools
+      - nginx
+      - python3
+      - python3-netaddr
+      - python3-passlib
+      - python3-pip
+      - python3-policycoreutils
+      - python3-pyvmomi
+      - python3-requests
+      - sos
+      - syslinux-tftpboot
+      - vim
+      - yum-utils
+    download_only: true
+    download_dir: /ocp4_downloads/rpms
+    state: latest
+ 
+- name: install downloaded rpms
+  ansible.builtin.shell:
+    cmd: rpm -ivh *rpm  --nodeps --force
+    chdir: /ocp4_downloads/rpms

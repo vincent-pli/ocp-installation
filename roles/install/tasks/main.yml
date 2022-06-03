@@ -1,0 +1,48 @@
+---
+#
+# 0. Prepare bastion node
+#
+- include: disable_firewalld.yaml
+- include: start_registry.yaml
+- include: httpd-server.yaml
+
+#
+# 1. Initialize bastion node
+#
+- include: init_facts.yaml
+- include: dns_reset.yaml
+- include: firewall_iptables_remove.yaml
+- include: set_hostname.yaml
+- include: hosts.yaml
+- include: ssh_playbook.yaml
+
+#
+# 2. Download OpenShift installer and client
+#
+# - include: ocp_install_dir.yaml
+# - include: ocp_download.yaml
+
+#
+# 3. Configure instrastructure services (DNS, DHCP, Chrony, HAProxy, NFS)
+#
+- include: global_proxy.yaml
+- include: chrony_server.yaml
+- include: chrony_client.yaml
+- include: etc_ansible_hosts.yaml
+- include: dnsmasq_libvirt_remove.yaml
+- include: tftpboot.yaml
+- include: pxe_links.yaml
+- include: dns_server.yaml
+- include: dns_interface.yaml
+- include: haproxy.yaml
+- include: prepare_xfs_volume.yaml
+- include: nfs_server.yaml
+
+#
+# 4. Install OpenShift
+#
+- include: ocp_install_config.yaml
+- include: ocp_ignition.yaml
+- include: create_oauth.yaml
+- include: registry_storage.yaml
+- include: ocp_install_scripts.yaml

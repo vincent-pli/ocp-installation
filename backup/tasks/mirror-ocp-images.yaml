@@ -1,0 +1,55 @@
+---
+- name: generate certificates
+  shell: |
+    openssl req -newkey rsa:4096 -nodes -sha256 -keyout {{WORKING_DIR}}/registry/certs/registry.key \
+            -x509 -days 365 -out {{WORKING_DIR}}/registry/certs/registry.crt \
+            -subj "/C=US/ST=/L=/O=/CN={{REGISTRY_SERVER}}" \
+            -addext "subjectAltName = DNS:{{REGISTRY_SERVER}}"
+
+- name: create user
+  shell: htpasswd -bBc {{WORKING_DIR}}/registry/auth/htpasswd {{REGISTRY_USER}} {{REGISTRY_PASSWORD}}
+
+- name: pull docker registry image
+  shell: podman pull docker.io/library/registry:2
+
+- name: save docker registry image
+  shell: |
+    rm -rf {{WORKING_DIR}}/registry/images/*.tar 
+    podman save -o {{WORKING_DIR}}/registry/images/registry-2.tar docker.io/library/registry:2
+
+- name: start registry
+  shell: |
+    echo "127.0.0.1 {{REGISTRY_SERVER}}" >> /etc/hosts
+    podman rm -f mirror-registry
+    podman run --name mirror-registry --publish {{REGISTRY_PORT}}:5000 \
+     --detach \
+     --volume {{WORKING_DIR}}/registry/data:/var/lib/registry:z \
+     --volume {{WORKING_DIR}}/registry/auth:/auth:z \
+     --volume {{WORKING_DIR}}/registry/certs:/certs:z \
+     --env "REGISTRY_AUTH=htpasswd" \
+     --env "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" \
+     --env REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd \
+     --env REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.crt \
+     --env REGISTRY_HTTP_TLS_KEY=/certs/registry.key \
+     docker.io/library/registry:2
+    
+    rm -f /etc/pki/ca-trust/source/anchors/registry.crt
+    cp -f {{WORKING_DIR}}/registry/certs/registry.crt /etc/pki/ca-trust/source/anchors/
+
+    update-ca-trust
+
+- name: create pull request file
+  shell: |
+    AUTH=$(echo -n "{{REGISTRY_USER}}:{{REGISTRY_PASSWORD}}" | base64 -w0)
+    CUST_REG='{"%s": {"auth":"%s", "email":"%s"}}\n' 
+    printf "$CUST_REG" "{{LOCAL_REGISTRY}}" "$AUTH" "{{EMAIL}}" > /tmp/local_reg.json
+    jq --argjson authinfo "$(</tmp/local_reg.json)" '.auths += $authinfo' {{LOCAL_PULL_SECRET}} > {{LOCAL_SECRET_JSON}}
+
+
+- name: mirror ocp images
+  shell: |
+    oc adm -a {{LOCAL_SECRET_JSON}} release mirror \
+     --from=quay.io/{{PRODUCT_REPO}}/{{RELEASE_NAME}}:{{OCP_RELEASE}}-x86_64 \
+     --to={{LOCAL_REGISTRY}}/{{LOCAL_REPOSITORY}} \
+     --to-release-image={{LOCAL_REGISTRY}}/{{LOCAL_REPOSITORY}}:{{OCP_RELEASE}} \
+     > {{WORKING_DIR}}/install/mirror-config.yaml

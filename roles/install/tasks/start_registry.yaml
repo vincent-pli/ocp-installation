@@ -1,0 +1,37 @@
+---
+- name: start registry
+  shell: |
+    podman load -i {{WORKING_DIR}}/registry/images/registry-2.tar
+
+    podman run --name {{REGISTRY_NAME}} --publish {{REGISTRY_PORT}}:5000 \
+     --detach \
+     --volume {{WORKING_DIR}}/registry/data:/var/lib/registry:z \
+     --volume {{WORKING_DIR}}/registry/auth:/auth:z \
+     --volume {{WORKING_DIR}}/registry/certs:/certs:z \
+     --env "REGISTRY_AUTH=htpasswd" \
+     --env "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" \
+     --env REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd \
+     --env REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.crt \
+     --env REGISTRY_HTTP_TLS_KEY=/certs/registry.key \
+     docker.io/library/registry:2
+
+     cp -f {{WORKING_DIR}}/registry/certs/registry.crt /etc/pki/ca-trust/source/anchors/
+     update-ca-trust
+
+     echo "{{bastion_ip}} {{REGISTRY_SERVER}}" >> /etc/hosts
+
+- # Push nfs storageclasses image to registry
+  shell: |
+    podman load -i {{WORKING_DIR}}/registry/images/nfs-subdir-external-provisioner.tar
+    podman tag k8s.gcr.io/sig-storage/nfs-subdir-external-provisioner:v4.0.2 {{LOCAL_REGISTRY}}/sig-storage/nfs-subdir-external-provisioner:v4.0.2
+    podman login -u {{REGISTRY_USER}} -p {{REGISTRY_PASSWORD}} {{LOCAL_REGISTRY}}
+    podman push {{LOCAL_REGISTRY}}/sig-storage/nfs-subdir-external-provisioner:v4.0.2
+
+    
+# Create systemd unit file to ensure the registry is started after reboot
+- name: create systemd unit file
+  shell: |
+    podman generate systemd {{REGISTRY_NAME}} -n > /etc/systemd/system/container-mirror-registry.service
+    systemctl enable container-mirror-registry.service
+    systemctl daemon-reload
+

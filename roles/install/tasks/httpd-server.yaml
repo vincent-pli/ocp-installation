@@ -1,0 +1,11 @@
+---
+- name: start httpd server
+  shell: |
+    systemctl start httpd.service
+    # systemctl stop iptables.service
+
+    sed -i 's/Listen 80/Listen {{HTTPD_LISTEN_PORT}}/g' /etc/httpd/conf/httpd.conf
+
+    systemctl restart httpd.service
+
+    ln -s {{WORKING_DIR}} /var/www/html/ocp4-workspace

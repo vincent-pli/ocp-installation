@@ -1,0 +1,9 @@
+---
+- name: package
+  shell: |
+      mkdir -p /offline-package
+      mkdir -p {{WORKING_DIR}}/installation-scripts
+
+      cd {{playbook_dir}}
+      cp -r ./* {{WORKING_DIR}}/installation-scripts 
+      #tar -zcvf /offline-package/openshift_downloads.tar.gz {{WORKING_DIR}}

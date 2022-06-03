@@ -1,0 +1,4 @@
+---
+- name: test
+  shell: |
+    touch /root/tmp.txt

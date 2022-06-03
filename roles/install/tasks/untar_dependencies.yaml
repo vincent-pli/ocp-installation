@@ -1,0 +1,6 @@
+---
+- name: untar oc and install cmd
+  shell: | 
+    tar -xf {{WORKING_DIR}}/clients/openshift-client-linux.tar.gz -C /usr/bin/
+
+    tar -xf {{WORKING_DIR}}/clients/openshift-install-linux.tar.gz -C {{WORKING_DIR}}/dependencies/

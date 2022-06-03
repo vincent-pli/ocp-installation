@@ -1,0 +1,6 @@
+---
+- name: prepare
+  hosts: localhost
+  connection: local
+  roles:
+    - prepare
