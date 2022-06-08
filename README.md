@@ -20,8 +20,8 @@
 
 get `pull-secret.txt` from https://console.redhat.com/openshift/install/pull-secret, save it as `/tmp/pull-secret.txt`
 
-clone this repo to preparation node, modify `./inventory/ocp46.inv`.
-The marjor goal to update the  `./inventory/ocp46.inv` is:
+clone this repo to preparation node, modify `./inventory/ocp48.inv`.
+The marjor goal to update the  `./inventory/ocp48.inv` is:
 - Decide the version of `ocp` you plan to adopt
 ```
 OCP_VERSION="4.8"
@@ -31,7 +31,7 @@ OCP_RELEASE="4.8.21"
 then run
 
 ```
-./prepare.sh prepare
+./run.sh prepare
 ```
 
 there will be `/ocp4-workspace` folder generated, package it
