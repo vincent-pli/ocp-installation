@@ -9,14 +9,14 @@
     name: iptables
     enabled: no
     state: stopped
-  when: "'iptables' in services"
+  when: "'iptables.service' in services"
 
 - name: Stop firewalld service
   service:
     name: firewalld
     enabled: no
     state: stopped
-  when: "'firewalld' in services"
+  when: "'firewalld.service' in services"
 
 - name: Check if Kubernetes forwards are already in iptables
   shell: |

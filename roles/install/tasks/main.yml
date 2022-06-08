@@ -3,14 +3,19 @@
 # 0. Prepare bastion node
 #
 - include: disable_firewalld.yaml
+# Prepare mirror registry
 - include: start_registry.yaml
+# Prepare http server with port 9080 for ignition files and others
 - include: httpd-server.yaml
 
 #
 # 1. Initialize bastion node
 #
+# have no idea what this task for, todo...
 - include: init_facts.yaml
+# recover /etc/resolv.conf_backup to /etc/resolv.conf
 - include: dns_reset.yaml
+
 - include: firewall_iptables_remove.yaml
 - include: set_hostname.yaml
 - include: hosts.yaml

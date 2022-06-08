@@ -9,3 +9,6 @@
     systemctl restart httpd.service
 
     ln -s {{WORKING_DIR}} /var/www/html/ocp4-workspace
+
+    systemctl enable httpd.service
+    systemctl daemon-reload

@@ -20,7 +20,7 @@
 
      echo "{{bastion_ip}} {{REGISTRY_SERVER}}" >> /etc/hosts
 
-- # Push nfs storageclasses image to registry
+- name: push nfs storageclasses image to registry
   shell: |
     podman load -i {{WORKING_DIR}}/registry/images/nfs-subdir-external-provisioner.tar
     podman tag k8s.gcr.io/sig-storage/nfs-subdir-external-provisioner:v4.0.2 {{LOCAL_REGISTRY}}/sig-storage/nfs-subdir-external-provisioner:v4.0.2
