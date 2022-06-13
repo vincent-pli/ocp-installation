@@ -30,13 +30,19 @@
 #
 # 3. Configure instrastructure services (DNS, DHCP, Chrony, HAProxy, NFS)
 #
+# global_proxy like http_proxy https_proxy, no need in our case
 - include: global_proxy.yaml
+
 - include: chrony_server.yaml
 - include: chrony_client.yaml
+
+# for ansible
 - include: etc_ansible_hosts.yaml
 - include: dnsmasq_libvirt_remove.yaml
+# set up tftp for IPI(installer-provisioned infrastructure)
 - include: tftpboot.yaml
 - include: pxe_links.yaml
+
 - include: dns_server.yaml
 - include: dns_interface.yaml
 - include: haproxy.yaml

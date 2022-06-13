@@ -33,7 +33,7 @@ bastion_ip="172.16.251.242"
 ntp_allow="172.16.251.0/24"
 ntp_servers=['172.16.251.242']
 default_gateway="172.16.255.250"
-external_name_servers=['172.16.251.242']
+external_name_servers=['8.8.8.8']
 interface_script="/etc/sysconfig/network-scripts/ifcfg-ens192"
 
 apiVIP="172.16.251.221"
