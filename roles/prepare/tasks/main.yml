@@ -1,6 +1,4 @@
 ---
   - include: download-dependencies.yaml
   - include: mirror-ocp-images.yaml
-  - include: mirror-operatorhub-images.yaml
-    when: "OPERATOR_HUB == 'true'"
   - include: package-offline.yaml

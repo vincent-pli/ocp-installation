@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-ansible-playbook -i {{inventory_file}} {{ocp_install_dir}}/scripts/playbooks/ocp4_remove_bootstrap.yaml \
+ansible-playbook -i {{inventory_file}} {{ocp_install_dir}}/scripts/ocp4_remove_bootstrap.yaml \
   "$@"
 
 echo "Shutting down bootstrap server {{groups['bootstrap'][0]}}"
