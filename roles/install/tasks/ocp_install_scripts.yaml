@@ -77,22 +77,6 @@
     group: root
     mode: 0755
 
-- name: Generate {{ocp_install_dir}}/scripts/start_namespace.sh
-  template:
-    src: ocp_start_namespace.j2
-    dest: "{{ocp_install_dir}}/scripts/start_namespace.sh"
-    owner: root
-    group: root
-    mode: 0755
-
-- name: Generate {{ocp_install_dir}}/scripts/stop_namespace.sh
-  template:
-    src: ocp_stop_namespace.j2
-    dest: "{{ocp_install_dir}}/scripts/stop_namespace.sh"
-    owner: root
-    group: root
-    mode: 0755
-
 - name: Generate {{ocp_install_dir}}/scripts/ocp4_remove_bootstrap.yaml
   copy:
     src: ocp4_remove_bootstrap.yaml

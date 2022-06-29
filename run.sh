@@ -18,5 +18,6 @@ elif [ $STAGE == "install" ]; then
     INVENTORY_FILE_PARAM="./inventory/ocp48.inv"
     inventory_file=$(realpath $INVENTORY_FILE_PARAM)
     ansible-playbook -i $inventory_file ./vmware_baremetal-offline-install.yaml \
+      -e inventory_file=$inventory_file \
       -e script_dir=$SCRIPT_DIR
 fi
