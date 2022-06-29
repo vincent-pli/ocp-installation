@@ -1,6 +1,0 @@
----
-- name: install rpms
-  shell: |
-    cd {{ playbook_dir }}/rpms
-    rpm -ivh wget*.rpm --nodeps --force
-

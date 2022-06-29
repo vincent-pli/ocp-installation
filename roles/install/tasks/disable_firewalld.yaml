@@ -3,4 +3,4 @@
   shell: |
     systemctl stop firewalld
     systemctl disable firewalld
-    sed -i "s/SELINUX=enforcing/SELINUX=permissive/g" /etc/selinux/config
+    sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config

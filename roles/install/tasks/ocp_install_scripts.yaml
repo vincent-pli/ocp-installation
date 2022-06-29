@@ -93,11 +93,10 @@
     group: root
     mode: 0755
 
-- name: Generate {{ocp_install_dir}}/scripts/playbooks
-  copy:
-    src: "{{WORKING_DIR}}/installation-scripts/backup/installation_scripts/playbooks"
-    dest: "{{ocp_install_dir}}/scripts"
-    force: yes
+- name: Generate {{ocp_install_dir}}/scripts/ocp4_remove_bootstrap.yaml
+  copy::
+    src: ocp4_remove_bootstrap.yaml
+    dest: "{{ocp_install_dir}}/scripts/ocp4_remove_bootstrap.yaml"
     owner: root
     group: root
     mode: 0755
