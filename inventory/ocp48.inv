@@ -52,7 +52,7 @@ OCP_CLIENT_CMD_URL="https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{
 OCP_INSTALL_CMD_URL="https://mirror.openshift.com/pub/openshift-v4/clients/ocp/{{OCP_RELEASE}}/openshift-install-linux.tar.gz"
 
 RHCOS_IMAGE_URL="https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/{{OCP_VERSION}}/latest"
-CENTOS_IMAGE_URL="http://mirror.dal.nexril.net/centos/8-stream/isos/x86_64/CentOS-Stream-8-x86_64-20220525-boot.iso"
+CENTOS_IMAGE_URL="http://mirror.dal.nexril.net/centos/8-stream/isos/x86_64/CentOS-Stream-8-x86_64-latest-boot.iso"
 
 
 ###############################################################################

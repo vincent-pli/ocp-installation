@@ -94,7 +94,7 @@
     mode: 0755
 
 - name: Generate {{ocp_install_dir}}/scripts/ocp4_remove_bootstrap.yaml
-  copy::
+  copy:
     src: ocp4_remove_bootstrap.yaml
     dest: "{{ocp_install_dir}}/scripts/ocp4_remove_bootstrap.yaml"
     owner: root

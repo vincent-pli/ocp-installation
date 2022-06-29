@@ -23,7 +23,7 @@
 
 - name: start registry
   shell: |
-    sed -i "s/SELINUX=enforcing/SELINUX=permissive/g" /etc/selinux/config
+    sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config
     echo "127.0.0.1 {{REGISTRY_SERVER}}" >> /etc/hosts
     podman rm -f mirror-registry
     podman run --name mirror-registry --publish {{REGISTRY_PORT}}:5000 \
