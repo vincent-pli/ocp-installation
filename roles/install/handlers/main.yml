@@ -2,8 +2,9 @@
 # handlers file for install
 - name: restart httpd
   service:
-    name-httpd
-    state=restarted
+    name: httpd
+    enabled: yes
+    state: restarted
 
 - name: setup httpd
   shell: |

@@ -34,14 +34,14 @@ RELEASE_NAME="ocp-release"
 172.16.251.242 host="bastion"
 
 [bootstrap]
-172.16.251.221 host="bootstrap" mac="xx:xx:xx:xx:xx:xx"
+172.16.251.221 host="bootstrap"
 
 [masters]
-172.16.251.222 host="master-1" mac="xx:xx:xx:xx:xx:xx"
-172.16.251.223 host="master-1" mac="xx:xx:xx:xx:xx:xx"
-172.16.251.224 host="master-1" mac="xx:xx:xx:xx:xx:xx"
+172.16.251.222 host="master-1"
+172.16.251.223 host="master-1"
+172.16.251.224 host="master-1"
 
 [workers]
-172.16.251.225 host="worker-1" mac="xx:xx:xx:xx:xx:xx"
-172.16.251.226 host="worker-2" mac="xx:xx:xx:xx:xx:xx"
-172.16.251.227 host="worker-3" mac="xx:xx:xx:xx:xx:xx"
+172.16.251.225 host="worker-1"
+172.16.251.226 host="worker-2"
+172.16.251.227 host="worker-3"

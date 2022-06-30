@@ -27,7 +27,7 @@ controlPlane:
   hyperthreading: Enabled
   name: master
 {% if rhcos_installation_method|upper!="IPI" %}
-  replicas: 3
+  replicas: {{vm_number_of_masters}}
 {% else %}
   replicas: {{vm_number_of_masters}}
   platform:
