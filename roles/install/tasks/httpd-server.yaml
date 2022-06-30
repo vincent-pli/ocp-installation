@@ -1,14 +1,12 @@
 ---
 - name: start httpd server
-  shell: |
-    systemctl start httpd.service
-    # systemctl stop iptables.service
-
-    sed -i 's/Listen 80/Listen {{HTTPD_LISTEN_PORT}}/g' /etc/httpd/conf/httpd.conf
-
-    systemctl restart httpd.service
-
-    ln -s {{WORKING_DIR}} /var/www/html/ocp4-workspace
-
-    systemctl enable httpd.service
-    systemctl daemon-reload
+  lineinfile:
+    dest=/etc/httpd/conf/httpd.conf
+    regexp="Listen 80"
+    line="Listen {{HTTPD_LISTEN_PORT}}"
+    backrefs=yes
+    backup=yes
+  
+  notify:
+    - setup httpd
+    - restart httpd

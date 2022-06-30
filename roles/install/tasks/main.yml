@@ -19,14 +19,9 @@
 - include: hosts.yaml
 - include: ssh_playbook.yaml
 
-#
-# 2. Download OpenShift installer and client
-#
-# - include: ocp_install_dir.yaml
-# - include: ocp_download.yaml
 
 #
-# 3. Configure instrastructure services (DNS, DHCP, Chrony, HAProxy, NFS)
+# 2. Configure instrastructure services (DNS, DHCP, Chrony, HAProxy, NFS)
 #
 - include: chrony_server.yaml
 - include: chrony_client.yaml
@@ -34,9 +29,6 @@
 # for ansible
 - include: etc_ansible_hosts.yaml
 - include: dnsmasq_libvirt_remove.yaml
-# set up tftp for IPI(installer-provisioned infrastructure)
-# - include: tftpboot.yaml
-# - include: pxe_links.yaml
 
 - include: dns_server.yaml
 - include: dns_interface.yaml

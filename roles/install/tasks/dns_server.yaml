@@ -13,9 +13,5 @@
     owner: root
     group: root
     mode: 0644
-
-- name: Start service dnsmasq
-  service:
-    name: dnsmasq
-    enabled: yes
-    state: restarted
+  notify:
+    - Start service dnsmasq

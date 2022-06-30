@@ -1,2 +1,16 @@
 ---
 # handlers file for install
+- name: restart httpd
+  service:
+    name-httpd
+    state=restarted
+
+- name: setup httpd
+  shell: |
+    ln -s {{WORKING_DIR}} /var/www/html/ocp4-workspace
+
+- name: Start service dnsmasq
+  service:
+    name: dnsmasq
+    enabled: yes
+    state: restarted
