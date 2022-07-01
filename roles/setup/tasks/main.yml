@@ -1,0 +1,28 @@
+---
+- name: copy kernal to /boot of target vm
+  copy: 
+    src: "{{ocp_install_dir}}/rhcos-live-kernel-x86_64"
+    dest: /boot/rhcos-live-kernel-x86_64
+
+- name: copy initramfs to /boot of target vm
+  copy: 
+    src: "{{ocp_install_dir}}/rhcos-live-initramfs.x86_64.img"
+    dest: /boot/rhcos-live-initramfs.x86_64.img
+
+- name: add grub entry
+  blockinfile:
+    path: "/etc/grub.d/40_custom"
+    block: | 
+        "menuentry 'coreos' {
+        set root='hd0,gtp2'
+        linux /rhcos-live-kernel-x86_64 coreos.inst=yes coreos.inst.install_dev=sda rd.neednet=1 console=tty0 console=ttyS0 coreos.live.rootfs_url=http://{{bastion_ip}}:{{HTTPD_LISTEN_PORT}}/{{ocp_install_dir}}/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://{{bastion_ip}}:{{HTTPD_LISTEN_PORT}}/{{ocp_install_dir}}/{{group_names[0]}}.ign ip={{ansible_default_ipv4.address}}::{{ansible_default_ipv4.gateway}}:{{ansible_default_ipv4.netmask}}:{{hostvars[inventory_hostname].host}}.{{BASE_DOMAIN}}:{{interface_name}}:none nameserver={{bastion_ip}}
+        initrd /rhcos-live-initramfs.x86_64.img }"
+
+- name: update default grub 
+  lineinfile:
+    path: /etc/default/grub
+    regexp: "GRUB_DEFAULT=saved"
+    line: "GRUB_DEFAULT=coreos"
+
+- name: Reboot servers if needed and allowed
+  reboot:

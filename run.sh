@@ -21,3 +21,8 @@ elif [ $STAGE == "install" ]; then
       -e inventory_file=$inventory_file \
       -e script_dir=$SCRIPT_DIR
 fi
+
+
+#sealer run kubernetes:v1.19.8 \
+#  --masters 192.168.0.2,192.168.0.3,192.168.0.4 \
+#  --nodes 192.168.0.5,192.168.0.6,192.168.0.7 --passwd xxx

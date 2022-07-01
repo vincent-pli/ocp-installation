@@ -2,6 +2,16 @@
 masters
 workers
 
+[cluster:children]
+bootstrap
+masters
+workers
+
+[cluster:var]
+ansible_connection=ssh
+ansible_user=root
+ansible_ssh_pass=letmein
+
 [all:vars]
 domain_name="cluster.local.com"
 cluster_name="ocp48"
@@ -22,7 +32,6 @@ LOCAL_SECRET_JSON="{{WORKING_DIR}}/install/ocp_pullsecret.json"
 
 WORKING_DIR="/ocp4-workspace"
 RELEASE_NAME="ocp-release"
-
 
 [lb]
 172.16.251.242 host="bastion"
