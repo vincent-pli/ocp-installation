@@ -1,12 +1,12 @@
 ---
 - name: copy kernal to /boot of target vm
   copy: 
-    src: "{{ocp_install_dir}}/rhcos-live-kernel-x86_64"
+    src: {{ocp_install_dir}}/rhcos-live-kernel-x86_64
     dest: /boot/rhcos-live-kernel-x86_64
 
 - name: copy initramfs to /boot of target vm
   copy: 
-    src: "{{ocp_install_dir}}/rhcos-live-initramfs.x86_64.img"
+    src: {{ocp_install_dir}}/rhcos-live-initramfs.x86_64.img
     dest: /boot/rhcos-live-initramfs.x86_64.img
 
 - name: add grub entry
@@ -24,5 +24,10 @@
     regexp: "GRUB_DEFAULT=saved"
     line: "GRUB_DEFAULT=coreos"
 
+- name: run grub2-mkconfig
+  shell: |
+    grub2-mkconfig -o /boot/grub2/grub.cfg
+    grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+    
 - name: Reboot servers if needed and allowed
   reboot:
