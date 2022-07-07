@@ -1,11 +1,11 @@
 [all:children]
-masters
-workers
+master
+worker
 
 [cluster:children]
 bootstrap
-masters
-workers
+master
+worker
 
 [cluster:vars]
 ansible_connection=ssh
@@ -13,6 +13,7 @@ ansible_user=root
 ansible_ssh_pass=letmein
 
 [all:vars]
+# common
 domain_name="cluster.local.com"
 cluster_name="ocp48"
 BASE_DOMAIN="{{cluster_name}}.{{domain_name}}"
@@ -33,6 +34,27 @@ LOCAL_SECRET_JSON="{{WORKING_DIR}}/install/ocp_pullsecret.json"
 WORKING_DIR="/ocp4-workspace"
 RELEASE_NAME="ocp-release"
 
+# for install role
+# vars file for install
+ocp_admin_password="letmein"
+
+bastion_ip="172.16.251.242"
+
+ntp_allow="172.16.251.0/24"
+
+# This should be a real ntp server(public or private), in airgap scenario, fillin the ip of bastion
+ntp_servers=['172.16.251.242']
+default_gateway="172.16.255.250"
+# In airgap scenario, fillin the ip of bastion
+external_name_servers=['8.8.8.8']
+interface_script="/etc/sysconfig/network-scripts/ifcfg-ens192"
+interface_name="ens192"
+
+vm_number_of_masters=3
+vm_number_of_workers=3
+
+
+
 [lb]
 172.16.251.242 host="bastion"
 
@@ -45,12 +67,12 @@ RELEASE_NAME="ocp-release"
 [bootstrap]
 172.16.251.221 host="bootstrap"
 
-[masters]
+[master]
 172.16.251.222 host="master-1"
 172.16.251.223 host="master-1"
 172.16.251.224 host="master-1"
 
-[workers]
+[worker]
 172.16.251.225 host="worker-1"
 172.16.251.226 host="worker-2"
 172.16.251.227 host="worker-3"

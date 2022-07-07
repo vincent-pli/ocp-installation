@@ -1,24 +1,4 @@
 ---
-# vars file for install
-ocp_admin_password: "letmein"
-
-bastion_ip: "172.16.251.242"
-
-ntp_allow: "172.16.251.0/24"
-
-# This should be a real ntp server(public or private), in airgap scenario, fillin the ip of bastion
-ntp_servers: 
-  - '172.16.251.242'
-default_gateway: "172.16.255.250"
-# In airgap scenario, fillin the ip of bastion
-external_name_servers:
-  - '8.8.8.8'
-interface_script: "/etc/sysconfig/network-scripts/ifcfg-ens192"
-interface_name: "ens192"
-
-vm_number_of_masters: 3
-vm_number_of_workers: 3
-
 ###############################################################################
 ##########  custom params 
 ###############################################################################

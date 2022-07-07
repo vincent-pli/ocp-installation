@@ -9,13 +9,28 @@
     src: "{{ocp_install_dir}}/rhcos-live-initramfs.x86_64.img"
     dest: /boot/rhcos-live-initramfs.x86_64.img
 
+- name: get groups
+  shell: |
+    echo "{{item}}"
+  with_items: "{{group_names}}"
+  when: item != 'cluster'
+  register: gname
+
+
+- name: set group
+  set_fact:
+     direct_group: "{{item.stdout}}"
+  with_items: "{{ gname.results }}"
+  when:
+    - item.skipped is not defined or item.skipped == false
+
 - name: add grub entry
   blockinfile:
     path: "/etc/grub.d/40_custom"
     block: | 
         menuentry 'coreos' {
         set root='hd0,gpt2'
-        linux /rhcos-live-kernel-x86_64 coreos.inst=yes coreos.inst.install_dev=sda rd.neednet=1 console=tty0 console=ttyS0 coreos.live.rootfs_url=http://{{bastion_ip}}:{{HTTPD_LISTEN_PORT}}/{{ocp_install_dir}}/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://{{bastion_ip}}:{{HTTPD_LISTEN_PORT}}/{{ocp_install_dir}}/{{group_names[0]}}.ign ip={{ansible_default_ipv4.address}}::{{ansible_default_ipv4.gateway}}:{{ansible_default_ipv4.netmask}}:{{hostvars[inventory_hostname].host}}.{{BASE_DOMAIN}}:{{interface_name}}:none nameserver={{bastion_ip}}
+        linux /rhcos-live-kernel-x86_64 coreos.inst=yes coreos.inst.install_dev=sda rd.neednet=1 console=tty0 console=ttyS0 coreos.live.rootfs_url=http://{{bastion_ip}}:{{HTTPD_LISTEN_PORT}}/{{ocp_install_dir}}/rhcos-live-rootfs.x86_64.img coreos.inst.ignition_url=http://{{bastion_ip}}:{{HTTPD_LISTEN_PORT}}/{{ocp_install_dir}}/{{direct_group}}.ign ip={{ansible_default_ipv4.address}}::{{ansible_default_ipv4.gateway}}:{{ansible_default_ipv4.netmask}}:{{hostvars[inventory_hostname].host}}.{{BASE_DOMAIN}}:{{interface_name}}:none nameserver={{bastion_ip}}
         initrd /rhcos-live-initramfs.x86_64.img }
 
 - name: update default grub 

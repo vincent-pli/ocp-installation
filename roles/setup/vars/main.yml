@@ -1,6 +1,4 @@
 ---
 # vars file for prepare
-bastion_ip: "172.16.251.242"
 ocp_install_dir: "{{WORKING_DIR}}/dependencies"
 HTTPD_LISTEN_PORT: "9080"
-interface_name: ens192
