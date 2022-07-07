@@ -30,7 +30,7 @@ backend cpapi
     balance roundrobin
 {% if rhcos_installation_method|upper!="IPI" %}
     server bootstrap {{groups['bootstrap'][0]}}:6443 check
-{% for host in groups['masters'] | sort %}
+{% for host in groups['master'] | sort %}
     server {{hostvars[host]['host']}} {{host}}:6443 check
 {% endfor %}
 {% else %}
@@ -41,7 +41,7 @@ backend cpapi
 backend cpcfg
     balance roundrobin
     server bootstrap {{groups['bootstrap'][0]}}:22623 check
-{% for host in groups['masters'] | sort %}
+{% for host in groups['master'] | sort %}
     server {{hostvars[host]['host']}} {{host}}:22623 check
 {% endfor %}
 {% endif %}
@@ -51,7 +51,7 @@ backend wrkhttp
     balance roundrobin
     option forwardfor
 {% if rhcos_installation_method|upper!="IPI" %}
-{% for host in groups['workers'] | sort %}
+{% for host in groups['worker'] | sort %}
     server {{hostvars[host]['host']}} {{host}}:80 check
 {% endfor %}
 {% else %}
@@ -62,7 +62,7 @@ backend wrkhttps
     mode tcp
     balance roundrobin
 {% if rhcos_installation_method|upper!="IPI" %}
-{% for host in groups['workers'] | sort %}
+{% for host in groups['worker'] | sort %}
     server {{hostvars[host]['host']}} {{host}}:443 check
 {% endfor %}
 {% else %}

@@ -9,7 +9,7 @@ address=/api.{{cluster_name}}.{{domain_name}}/{{groups['lb'][0]}}
 address=/.apps.{{cluster_name}}.{{domain_name}}/{{groups['lb'][0]}}
 
 {% if rhcos_installation_method|upper != "IPI" %}
-{% for host in groups['masters'] | sort %}
+{% for host in groups['master'] | sort %}
 address=/etcd-{{loop.index}}.{{cluster_name}}.{{domain_name}}/{{host}}
 srv-host=_etcd-server-ssl._tcp.{{cluster_name}}.{{domain_name}},etcd-{{loop.index}}.{{cluster_name}}.{{domain_name}},2380,0,10
 {% endfor %}
@@ -21,11 +21,11 @@ dhcp-range={{dhcp_range[0]}},{{dhcp_range[1]}},infinite
 dhcp-option=3,{{default_gateway}}
 
 {% if rhcos_installation_method|upper!="IPI" %}
-{% for host in groups['masters'] | sort %}
+{% for host in groups['master'] | sort %}
 dhcp-host={{hostvars[host]['mac']}},{{hostvars[host]['host']}},{{host}}
 {% endfor %}
 
-{% for host in groups['workers'] | sort %}
+{% for host in groups['worker'] | sort %}
 dhcp-host={{hostvars[host]['mac']}},{{hostvars[host]['host']}},{{host}}
 {% endfor %}
 

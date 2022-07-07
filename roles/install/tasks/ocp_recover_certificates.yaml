@@ -17,7 +17,7 @@
         path: "{{ocp_install_dir}}/recovery"
         state: directory
 
-- hosts: masters[0]
+- hosts: master[0]
   remote_user: core
   become: yes
   gather_facts: no
@@ -109,7 +109,7 @@
         - /tmp/copy-kubelet-ca.crt
 
 - hosts: 
-    - masters
+    - master
   remote_user: core
   become: yes
   gather_facts: no
@@ -154,7 +154,7 @@
       pause:
         minutes: 2
 
-- hosts: masters[0]
+- hosts: master[0]
   remote_user: core
   become: yes
   gather_facts: no
@@ -171,7 +171,7 @@
       ignore_errors: yes
 
 - hosts: 
-    - workers
+    - worker
   remote_user: core
   become: yes
   gather_facts: no
@@ -193,7 +193,7 @@
       pause:
         minutes: 2
 
-- hosts: masters[0]
+- hosts: master[0]
   remote_user: core
   become: yes
   gather_facts: no

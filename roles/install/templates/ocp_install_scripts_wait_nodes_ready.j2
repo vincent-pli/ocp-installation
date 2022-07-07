@@ -2,7 +2,7 @@
 
 echo "Waiting for nodes to become ready"
 
-all_nodes="{% for host in groups['masters'] | union(groups['workers']) | sort -%}
+all_nodes="{% for host in groups['master'] | union(groups['worker']) | sort -%}
 {{hostvars[host]['host']}}.{{cluster_name}}.{{domain_name}} {% if not loop.last -%} {%- endif %}
 {%- endfor %}"
 
